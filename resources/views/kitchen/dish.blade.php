@@ -22,58 +22,60 @@
           <div class="col-lg-12">
           <div class="card">
               <div class="card-header">
-                <h3 class="card-title">DataTable with default features</h3>
+                <h3 class="card-title">Dishes</h3>
+                <a href="dish/create" class="btn btn-success" style="float:right">Create</a>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
+              @if (session('message'))
+                <div class="alert alert-success">
+                    {{ session('message') }}
+                </div>
+            @endif
                 <table id="dishes" class="table table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th>Rendering engine</th>
-                    <th>Browser</th>
-                    <th>Platform(s)</th>
-                    <th>Engine version</th>
-                    <th>CSS grade</th>
+                    <th>Dish Name</th>
+                    <th>Category Name</th>
+                    <th>Created</th>
+                    <th>Action</th>
                   </tr>
                   </thead>
                   <tbody>
-                  <tr>
-                    <td>Trident</td>
-                    <td>Internet
-                      Explorer 4.0
-                    </td>
-                    <td>Win 95+</td>
-                    <td> 4</td>
-                    <td>X</td>
+                  @foreach( $dishes as $dish)
+                    <tr>
+                        <td>{{ $dish->name}}</td>
+                        <td>{{ $dish->category->name }} </td>
+                         <td>{{ $dish->created_at }}</td>
+                         
+                         <td>
+                         <div class="form-row">
+                          <a style="height:40px; margin-right: 10px" href="/dish/{{$dish->id}}/edit" class="btn btn-warning">Edit</a>
+                         
+                          <form action="/dish/{{$dish->id}}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn btn-danger" type="submit">Delete</button>
+                          </form>
+                          </div>
+                          </td>
+                         
+                        
                   </tr>
-                  <tr>
-                    <td>Trident</td>
-                    <td>Internet
-                      Explorer 5.0
-                    </td>
-                    <td>Win 95+</td>
-                    <td>5</td>
-                    <td>C</td>
-                  </tr>
-                  <tr>
-                    <td>Trident</td>
-                    <td>Internet
-                      Explorer 5.5
-                    </td>
-                    <td>Win 95+</td>
-                    <td>5.5</td>
-                    <td>A</td>
-                  </tr>
+                  @endforeach
+                 
                   </tbody>
                   
                 </table>
               </div>
               <!-- /.card-body -->
+              </div>
+              </div>
         </div>
               
 
             
-           </div>
+           
         <!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
@@ -81,12 +83,10 @@
   </div>
   <!-- /.content-wrapper -->
 @endsection
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" referrerpolicy="no-referrer"></script>
 <script>
   $(function () {
-    $("#dishes").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#dishes_wrapper .col-md-6:eq(0)');
+    
     $('#dishes').DataTable({
       "paging": true,
       "lengthChange": false,
@@ -98,4 +98,3 @@
     });
   });
 </script>
-</html>
